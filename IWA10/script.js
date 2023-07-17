@@ -69,6 +69,8 @@ if (isEarlier) {
     console.log('Date change:', copied.date)
 }
 
+
+
 const firstHolidayTimestamp = Math.min(
     holidays[0].date,
     holidays[1].date,
@@ -82,19 +84,19 @@ const firstHolidayTimestamp = Math.min(
 )
 
 const lastHolidayTimestamp = Math.max(
-    holidays[0].date.getTime,
-    holidays[1].date.getTime,
-    holidays[2].date.getTime,
-    holidays[3].date.getTime,
-    holidays[4].date.getTime,
-    holidays[5].date.getTime,
-    holidays[6].date.getTime,
-    holidays[7].date.getTime,
-    holidays[8].date.getTime,
+    holidays[0].date,
+    holidays[1].date,
+    holidays[2].date,
+    holidays[3].date,
+    holidays[4].date,
+    holidays[5].date,
+    holidays[6].date,
+    holidays[7].date,
+    holidays[8].date,
 )
 
-const firstDay = holidays[firstHolidayTimestamp].getDate()
-const firstMonth = firstHolidayTimestamp.getMonth
+const firstDay = holidays[firstHolidayTimestamp].date.getDate()
+const firstMonth = firstHolidayTimestamp.getMonth()
 const lastDay = lastHolidayTimestamp.getDate
 const lastMonth = lastHolidayTimestamp.getMonth
 
