@@ -72,7 +72,7 @@ if (isEarlier) {
 
 
 const firstHolidayTimestamp = Math.min(
-    holidays[0].date,
+    holidays[0].getDate(),
     holidays[1].date,
     holidays[2].date,
     holidays[3].date,
