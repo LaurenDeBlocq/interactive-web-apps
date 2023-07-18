@@ -53,7 +53,7 @@ const futureId = 9
 
 // Do not change code above this comment
 
-//console.log(holidays.futureId.name || 'ID {futureId} not created yet')
+console.log(holidays[futureId] || 'ID {futureId} not created yet')
 
 let copied = holidays[6]
 copied.name = 'X-mas Day'
@@ -69,39 +69,48 @@ if (isEarlier) {
     console.log('Date change:', copied.date)
 }
 
-
+holidays[0].date = new Date(`16 December ${currentYear}`)
 
 const firstHolidayTimestamp = Math.min(
-    holidays[0].getDate(),
-    holidays[1].date,
-    holidays[2].date,
-    holidays[3].date,
-    holidays[4].date,
-    holidays[5].date,
-    holidays[6].date,
-    holidays[7].date,
-    holidays[8].date,
+    holidays[0].date.getTime(),
+    holidays[1].date.getTime(),
+    holidays[2].date.getTime(),
+    holidays[3].date.getTime(),
+    holidays[4].date.getTime(),
+    holidays[5].date.getTime(),
+    holidays[6].date.getTime(),
+    holidays[7].date.getTime(),
+    holidays[8].date.getTime(),
 )
 
 const lastHolidayTimestamp = Math.max(
-    holidays[0].date,
-    holidays[1].date,
-    holidays[2].date,
-    holidays[3].date,
-    holidays[4].date,
-    holidays[5].date,
-    holidays[6].date,
-    holidays[7].date,
-    holidays[8].date,
+    holidays[0].date.getTime(),
+    holidays[1].date.getTime(),
+    holidays[2].date.getTime(),
+    holidays[3].date.getTime(),
+    holidays[4].date.getTime(),
+    holidays[5].date.getTime(),
+    holidays[6].date.getTime(),
+    holidays[7].date.getTime(),
+    holidays[8].date.getTime(),
 )
 
-const firstDay = holidays[firstHolidayTimestamp].date.getDate()
-const firstMonth = firstHolidayTimestamp.getMonth()
-const lastDay = lastHolidayTimestamp.getDate
-const lastMonth = lastHolidayTimestamp.getMonth
+const firstHoliday = new Date()
+firstHoliday.setTime(firstHolidayTimestamp)
+
+const lastHoliday = new Date()
+lastHoliday.setTime(lastHolidayTimestamp)
+
+const firstDay = firstHoliday.getDate()
+const firstMonth = firstHoliday.getMonth() + 1
+const lastDay = lastHoliday.getDate()
+const lastMonth = lastHoliday.getMonth() + 1
 
 console.log(`${firstDay}/${firstMonth}/${currentYear}`)
 console.log(`${lastDay}/${lastMonth}/${currentYear}`)
 
-const randomHoliday = holidays
-console.log(randomHoliday[Math.random])
+const randomHoliday = Math.round(Math.random()*(Object.keys(holidays).length - 1))
+const randomDay = holidays[randomHoliday].date.getDate()
+const randomMonth = holidays[randomHoliday].date.getMonth() + 1
+
+console.log(`${randomDay}/${randomMonth}/${currentYear}`)
