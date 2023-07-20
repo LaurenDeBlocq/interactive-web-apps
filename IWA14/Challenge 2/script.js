@@ -1,17 +1,18 @@
 let value = 0
 
-const add = function ()  { 
-    value = this.a + this.b 
-    return this.b = value
+const add = function (a, b) { 
+    value = a + b 
+	b = value
 }
 
-const multiply = function () { 
-    return value = this.b * this.c 
+const multiply = function (a, b) { 
+    return value = a * b 
 }
 
- const internal = function () {
-	add()
-	multiply()
+const internal = function () {
+	add(this.internal.a, this.internal.b)
+	this.internal.b = value
+	multiply(this.internal.b, this.internal.c)
     console.log(value)
 }
 
