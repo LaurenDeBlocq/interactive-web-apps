@@ -8,10 +8,8 @@ const data = {
 
 // Only edit below
 
-const { first = 1 } = data.first || {}
-const { second = 1 } = data.second || {}
-const { third = 1 } = data.third || {}
-
+const [[a,first],[b,second],[c,third]] = data.lists
+ 
 // const { first = 1 } = data.first || {}
 // const { second = 1 } = data.second || {}
 // const { third = 1 } = data.third || {}
@@ -19,15 +17,16 @@ const { third = 1 } = data.third || {}
 const result = []
 
 const extractBiggest = () => {
-	if (first[-1] > second[-1]) {
-		return first
-	}
+	if ((first.at(-1)??0) > (second.at(-1)??0) && (first.at(-1)??0) > (third.at(-1)??0)) {
+        return first.pop()
+	} 
 
-	if (third[-1] < 1) {
-		return second
+
+	if ((second.at(-1)??0) > (third.at(-1)??0) && second.at(-1) > (first.at(-1)??0)) {
+		return second.pop()
 	}
 	
-	return third
+	return third.pop()
 }
 
 // Only edit above
