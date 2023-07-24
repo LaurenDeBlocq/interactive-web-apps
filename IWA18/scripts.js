@@ -38,6 +38,7 @@ const handleDragStart = (event) => {
 const handleDragEnd = (event) => {
     state.orders[event.target.dataset.id].column = state.dragging.over
     moveToColumn(event.target.dataset.id, state.orders[event.target.dataset.id].column)
+    html.other.add.focus()
 }
 
 /* handleHelpToggle should enable the opening and closing of the Help overlay */
@@ -46,6 +47,8 @@ const handleHelpToggle = (event) => {
     item.toggleAttribute("open")
     if (!html.help.overlay.hasAttribute("open")){
         html.other.add.focus()
+    } else {
+        html.help.cancel.focus()
     }
 }
 
@@ -110,7 +113,6 @@ const handleEditSubmit = (event) => {
 
     state.orders[orderToUpdate.id].column = event.target[3].value
     const orderNode = document.querySelector(`[data-id="${orderToUpdate.id}"]`)
-    console.log(orderNode);
 
     orderNode.querySelector('[data-order-title]').innerText = orderToUpdate.title
     orderNode.querySelector('[data-order-table]').innerText = orderToUpdate.table
@@ -121,13 +123,16 @@ const handleEditSubmit = (event) => {
 
 /* If an order is deleted this removes it from the system completely? */
 const handleDelete = (event) => {
+    if (confirm("Are you sure you want to delete this order?")){
     delete state.orders[html.edit.id.value]
 
     const deletedNode = document.querySelector(`[data-id="${html.edit.id.value}"]`)
     deletedNode.remove()
-
+    
     html.edit.overlay.toggleAttribute("open")
     html.other.add.focus()
+    }    
+
 }
 
 html.add.cancel.addEventListener('click', handleAddToggle)
