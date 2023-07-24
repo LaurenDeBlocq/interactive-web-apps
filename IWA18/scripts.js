@@ -1,5 +1,5 @@
-import { html, createOrderHtml, moveToColumn } from "./view.js";
-import { createOrderData, state } from "./data.js";
+import { html, createOrderHtml, moveToColumn, updateDraggingHtml } from "./view.js";
+import { createOrderData, state, updateDragging } from "./data.js";
 /**
  * A handler that fires when a user drags over any element inside a column. In
  * order to determine which column the user is dragging over the entire event
@@ -30,15 +30,24 @@ const handleDragOver = (event) => {
 }
 
 /* handleDragStart should store which column the order starts in? */
-const handleDragStart = (event) => {}
+const handleDragStart = (event) => {
+    console.log(event);
+    state.dragging.source = state.orders[event.target.dataset.id].column
+}
 
 /* handleDragEnd should store which column the order ends in? */
-const handleDragEnd = (event) => {}
+const handleDragEnd = (event) => {
+    state.orders[event.target.dataset.id].column = state.dragging.over
+    moveToColumn(event.target.dataset.id, state.orders[event.target.dataset.id].column)
+}
 
 /* handleHelpToggle should enable the opening and closing of the Help overlay */
 const handleHelpToggle = (event) => {
     const item = document.querySelector('[data-help-overlay]')
     item.toggleAttribute("open")
+    if (!html.help.overlay.hasAttribute("open")){
+        html.other.add.focus()
+    }
 }
 
 /* handleAddToggle should enable the opening and closing of the Add Order overlay. When
@@ -48,6 +57,7 @@ const handleAddToggle = (event) => {
     html.add.overlay.toggleAttribute("open")
     html.add.title.value = ""
     html.add.table.value = ""
+    if (!html.add.overlay.hasAttribute("open")) html.other.add.focus()
 }
 
 /* handleAddSubmit should take the info put into the order and create a new order?? 
@@ -59,6 +69,7 @@ const handleAddSubmit = (event) => {
     state.orders[item.id] = item
     html.columns[item.column].appendChild(createOrderHtml(item))
     handleAddToggle()
+    html.other.add.focus()
 }
 
 /* I suppose this is to open and close the edit order overlay */
@@ -77,21 +88,18 @@ const handleEditToggle = (event) => {
         html.edit.table.value = null
         html.edit.column.value = null
         html.edit.overlay.removeAttribute("open")
+        html.other.add.focus()
     }
+
 }
 
 /* Takes any changes to the order that are entered and updates the order to reflect */
 const handleEditSubmit = (event) => {
-    console.log(event);
     event.preventDefault()
     const orderToUpdate = state.orders[event.target[0].value]
 
     state.orders[orderToUpdate.id].title = event.target[1].value
     state.orders[orderToUpdate.id].table = event.target[2].value
-    
-    
-    // state.orders[orderToUpdate.id].title = orderToUpdate.title
-    // state.orders[orderToUpdate.id].table = orderToUpdate.table
     
     if (state.orders[orderToUpdate.id].column !== event.target[3].value){
         moveToColumn(orderToUpdate.id, event.target[3].value)
@@ -105,12 +113,14 @@ const handleEditSubmit = (event) => {
     orderNode.querySelector('[data-order-table]').innerText = orderToUpdate.table
     
     html.edit.overlay.toggleAttribute("open")
-    
-
+    html.other.add.focus()
 }
 
 /* If an order is deleted this removes it from the system completely? */
-const handleDelete = (event) => {}
+const handleDelete = (event) => {
+    console.log(event);
+
+}
 
 html.add.cancel.addEventListener('click', handleAddToggle)
 html.other.add.addEventListener('click', handleAddToggle)
