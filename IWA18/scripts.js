@@ -1,4 +1,4 @@
-import { html, createOrderHtml } from "./view.js";
+import { html, createOrderHtml, moveToColumn } from "./view.js";
 import { createOrderData, state } from "./data.js";
 /**
  * A handler that fires when a user drags over any element inside a column. In
@@ -46,6 +46,8 @@ closed without submitting, all info must be removed from the form so the next ti
 is opened, the form is empty */
 const handleAddToggle = (event) => {
     html.add.overlay.toggleAttribute("open")
+    html.add.title.value = ""
+    html.add.table.value = ""
 }
 
 /* handleAddSubmit should take the info put into the order and create a new order?? 
@@ -53,29 +55,59 @@ Not 100% sure on this one... maybe it just must submit the form? But isn't there
 Also if order is submitted, all info must be removed from the form */
 const handleAddSubmit = (event) => {
     event.preventDefault()
-    const item = createOrderData({title:html.add.title.value, table:html.add.table.value,column:'ordered'})/** idk what goes here yet, but the data from the form */
+    const item = createOrderData({title:html.add.title.value, table:html.add.table.value,column:'ordered'})
     state.orders[item.id] = item
     html.columns[item.column].appendChild(createOrderHtml(item))
     handleAddToggle()
 }
 
-
 /* I suppose this is to open and close the edit order overlay */
 const handleEditToggle = (event) => {
+    event.preventDefault()
     if (event.target.dataset.id){
-    console.log(state);
-    const currentOrderState = state.orders[event.target.dataset.id]
-    console.log(currentOrderState);
-    html.edit.id.value = currentOrderState.id
-    html.edit.title.value = currentOrderState.title
-    html.edit.table.value = currentOrderState.table
-
-    html.edit.overlay.toggleAttribute("open")
-}
+        const currentOrderState = state.orders[event.target.dataset.id]
+        html.edit.id.value = currentOrderState.id
+        html.edit.title.value = currentOrderState.title
+        html.edit.table.value = currentOrderState.table
+        html.edit.column.value = currentOrderState.column
+        html.edit.overlay.toggleAttribute("open")
+    } else {
+        html.edit.id.value = null
+        html.edit.title.value = null
+        html.edit.table.value = null
+        html.edit.column.value = null
+        html.edit.overlay.removeAttribute("open")
+    }
 }
 
 /* Takes any changes to the order that are entered and updates the order to reflect */
-const handleEditSubmit = (event) => {}
+const handleEditSubmit = (event) => {
+    console.log(event);
+    event.preventDefault()
+    const orderToUpdate = state.orders[event.target[0].value]
+
+    state.orders[orderToUpdate.id].title = event.target[1].value
+    state.orders[orderToUpdate.id].table = event.target[2].value
+    
+    
+    // state.orders[orderToUpdate.id].title = orderToUpdate.title
+    // state.orders[orderToUpdate.id].table = orderToUpdate.table
+    
+    if (state.orders[orderToUpdate.id].column !== event.target[3].value){
+        moveToColumn(orderToUpdate.id, event.target[3].value)
+    } 
+
+    state.orders[orderToUpdate.id].column = event.target[3].value
+    const orderNode = document.querySelector(`[data-id="${orderToUpdate.id}"]`)
+    console.log(orderNode);
+
+    orderNode.querySelector('[data-order-title]').innerText = orderToUpdate.title
+    orderNode.querySelector('[data-order-table]').innerText = orderToUpdate.table
+    
+    html.edit.overlay.toggleAttribute("open")
+    
+
+}
 
 /* If an order is deleted this removes it from the system completely? */
 const handleDelete = (event) => {}
