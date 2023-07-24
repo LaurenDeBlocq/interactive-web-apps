@@ -31,7 +31,6 @@ const handleDragOver = (event) => {
 
 /* handleDragStart should store which column the order starts in? */
 const handleDragStart = (event) => {
-    console.log(event);
     state.dragging.source = state.orders[event.target.dataset.id].column
 }
 
@@ -57,7 +56,11 @@ const handleAddToggle = (event) => {
     html.add.overlay.toggleAttribute("open")
     html.add.title.value = ""
     html.add.table.value = ""
-    if (!html.add.overlay.hasAttribute("open")) html.other.add.focus()
+    if (!html.add.overlay.hasAttribute("open")){
+        html.other.add.focus()
+    } else {
+        html.add.title.focus()
+    }
 }
 
 /* handleAddSubmit should take the info put into the order and create a new order?? 
@@ -118,8 +121,13 @@ const handleEditSubmit = (event) => {
 
 /* If an order is deleted this removes it from the system completely? */
 const handleDelete = (event) => {
-    console.log(event);
+    delete state.orders[html.edit.id.value]
 
+    const deletedNode = document.querySelector(`[data-id="${html.edit.id.value}"]`)
+    deletedNode.remove()
+
+    html.edit.overlay.toggleAttribute("open")
+    html.other.add.focus()
 }
 
 html.add.cancel.addEventListener('click', handleAddToggle)
