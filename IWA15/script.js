@@ -22,7 +22,7 @@ const extractBiggest = () => {
 	} 
 
 
-	if ((second.at(-1)??0) > (third.at(-1)??0) && second.at(-1) > (first.at(-1)??0)) {
+	if ((second.at(-1)??0) > (third.at(-1)??0)) {
 		return second.pop()
 	}
 	
